@@ -1,0 +1,19 @@
+{
+  "name": "24pay/24pay_magento2",
+  "description": "24Pay Payment Gateway",
+  "require": {
+    "php": "~7.0.0"
+  },
+  "type": "magento2-module",
+  "version": "1.0.0",
+  "license": [
+  ],
+   "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "TwentyFourPay\\TwentyFourPayGateway\\": ""
+    }
+  }
+}
