@@ -35,6 +35,8 @@ class Ipn extends Result {
 
     $response = preg_replace("/<\?.*?\?>/", "", trim((string)$this->getRequest()->getPost('params', NULL)));
 
+    //return;
+
     $notification = $this->getNotificationParser($response);
 
     if ($notification->isValid()) {

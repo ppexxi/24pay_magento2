@@ -1,5 +1,7 @@
 <?php
 
+require_once('Service24Pay.class.php');
+
 /**
  * class handling XML notification from 24pay gateway server
  */
