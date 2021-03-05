@@ -2,7 +2,7 @@
 An extension to add integration with 24Pay Payment Gateway
 
 ## Upload
-Copy TwentyFourPay to [magento]/app/code (create directory magento]/app/code, if it doesn't exist)
+Copy TwentyFourPay to [magento]/app/code (create directory [magento]/app/code, if it doesn't exist)
 
 ## Compile
 php bin/magento setup:upgrade;
