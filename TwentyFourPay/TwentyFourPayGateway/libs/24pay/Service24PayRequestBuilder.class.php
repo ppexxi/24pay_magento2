@@ -32,6 +32,7 @@ class Service24PayRequestBuilder {
     "Timestamp" => null,
     "NotifyEmail" => null,
     "Debug" => null,
+    "RedirectSign" => null
   );
 
   /**
@@ -133,6 +134,10 @@ class Service24PayRequestBuilder {
     $this->requestParams["Debug"] = $value;
   }
 
+  public function setRedirectSign($value) {
+    $this->requestParams["RedirectSign"] = $value;
+  }
+
   public final function validate() {
     $this->errors = array();
 
@@ -144,6 +149,11 @@ class Service24PayRequestBuilder {
           break;
 
         case "Debug":
+          if (!is_bool($value)) $this->errors[] = $key;
+
+          break;
+
+        case "RedirectSign":
           if (!is_bool($value)) $this->errors[] = $key;
 
           break;

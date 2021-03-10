@@ -76,7 +76,8 @@ class Form extends CoreClass {
       //"City" => $address->getCity() ,
       "Country" => $this->fixCountryCode($address ? $address->getCountryId() : 'SK'),
       "Debug" => $this->config->isDebug(),
-      "PreAuthProvided" => $this->config->isPreAuthProvided()
+      "PreAuthProvided" => $this->config->isPreAuthProvided(),
+      "RedirectSign" => true
     );
 
     $notifyEmail = $this->config->getNotifyEmail();
@@ -102,6 +103,13 @@ class Form extends CoreClass {
     if (!$order->getId()) {
       die('No order');
     }      
+
+    if ($order->getState() != \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT) {
+      $order->setState(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT);
+      $order->setStatus(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT);
+      $order->addStatusHistoryComment('24Pay: Redirected to gateway');
+      $order->save();
+    }
 
     $response = $this->createResponse();
     $form = $this->getPostForm($order_id);

@@ -34,9 +34,8 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod {
 
   public function initialize($paymentAction, $stateObject) {
     $payment = $this->getInfoInstance();
-    $state = Order::STATE_PENDING_PAYMENT;
-    $stateObject->setState($state);
-    $stateObject->setStatus('pending_payment');
+    //$stateObject->setState(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT);
+    //$stateObject->setStatus(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT);
     $stateObject->setIsNotified(false);    
   }
 
