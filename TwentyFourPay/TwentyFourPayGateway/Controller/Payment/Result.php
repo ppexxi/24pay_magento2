@@ -29,9 +29,26 @@ class Result extends CoreClass {
   public function execute() {
     $result = trim((string)$this->getRequest()->getParam('Result', NULL));
     $MsTxnId = trim((string)$this->getRequest()->getParam('MsTxnId', NULL));
+    $amount = trim((string)$this->getRequest()->getParam('Amount', NULL));
+    $currCode = trim((string)$this->getRequest()->getParam('CurrCode', NULL));
+    $sign = trim((string)$this->getRequest()->getParam('Sign', NULL));
+
+    $service = $this->config->get24PayService();
+    $calcSign = $service->computeSIGN($MsTxnId . $amount . $currCode . $result);
+
+    if (!$result || !$MsTxnId) {
+      $this->messageManager->addErrorMessage(__('Invalid response in the process of payment'));
+      $this->_redirect('checkout/onepage/failure', ['_secure' => TRUE]);
+    }
+
+    if ($calcSign != $sign) {
+      $this->messageManager->addErrorMessage(__('Malformed response in the process of payment'));
+      $this->_redirect('checkout/onepage/failure', ['_secure' => TRUE]);
+    }
+
     $order_id = (int)$this->parseMsTxnId($MsTxnId);
 
-    if (!$result || !$MsTxnId || !$order_id) {
+    if (!$order_id) {
       $this->messageManager->addErrorMessage(__('Invalid response in the process of payment'));
       $this->_redirect('checkout/onepage/failure', ['_secure' => TRUE]);
     }
@@ -76,11 +93,19 @@ class Result extends CoreClass {
       $this->_redirect('checkout/onepage/success', ['_secure' => TRUE]);
     }
     else {
-      $order->addStatusHistoryComment('24Pay (redirect): Unknown state [error]');
+      if ($result == 'FAIL') {
+        $this->messageManager->addErrorMessage(__('An failure occurred in the process of payment'));
+        $this->_redirect('checkout/onepage/failure', ['_secure' => TRUE]);
+      }
+      else {
+        $this->_redirect('checkout/onepage/success', ['_secure' => TRUE]);
+      }
+      
+      /*$order->addStatusHistoryComment('24Pay (redirect): Unknown state [error]');
       $order->save();
 
       $this->messageManager->addErrorMessage(__('An unknown result occurred in the process of payment'));
-      $this->_redirect('checkout/onepage/failure', ['_secure' => TRUE]);
+      $this->_redirect('checkout/onepage/failure', ['_secure' => TRUE]);*/
     }
   }
 }

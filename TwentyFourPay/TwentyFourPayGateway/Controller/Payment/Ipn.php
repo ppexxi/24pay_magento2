@@ -11,7 +11,7 @@ use Magento\Framework\Exception\PaymentException;
  * This controller handles the server to server notification
  *
  */
-class Ipn extends Result {
+class Ipn extends Result implements \Magento\Framework\App\Action\HttpPostActionInterface, \Magento\Framework\App\CsrfAwareActionInterface {
 
   /**
    * Constructor
@@ -24,6 +24,14 @@ class Ipn extends Result {
 
   protected function getNotificationParser($XMLResponseString = null) {
     return new \Service24PayNotificationParser($this->config->get24PayService() , $XMLResponseString);
+  }
+
+  public function createCsrfValidationException(\Magento\Framework\App\RequestInterface $request): ? \Magento\Framework\App\Request\InvalidRequestException {
+    return null;
+  }
+
+  public function validateForCsrf(\Magento\Framework\App\RequestInterface $request): ?bool {
+    return true;
   }
 
   /**

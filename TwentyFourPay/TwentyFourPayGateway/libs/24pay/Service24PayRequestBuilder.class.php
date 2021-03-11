@@ -248,6 +248,10 @@ class Service24PayRequestBuilder {
       $requestParams["EshopId"] = $this->service24Pay->getEshopId();
       $requestParams["Timestamp"] = date("Y-m-d H:i:s");
 
+      $requestParams["Debug"] = empty($requestParams["Debug"]) ? 'false' : 'true';
+      $requestParams["PreAuthProvided"] = empty($requestParams["PreAuthProvided"]) ? 'false' : 'true';       
+      $requestParams["RedirectSign"] = empty($requestParams["RedirectSign"]) ? 'false' : 'true';
+
       $requestParams["Sign"] = $this->service24Pay->computeSIGN($requestParams["Mid"] . $requestParams["Amount"] . $requestParams["CurrAlphaCode"] . $requestParams["MsTxnId"] . $requestParams["FirstName"] . $requestParams["FamilyName"] . $requestParams["Timestamp"]);
 
       return $requestParams;
